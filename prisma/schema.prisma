@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  
+}
+
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+}
+
+// --- MODELS ---
+
+model Branch {
+  id               Int               @id @default(autoincrement())
+  branch_name      String
+  branch_code      String            @unique
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  // Relations
+  users            User[]
+  loans            Loan[]
+  accounts         Account[]
+  investments      Investment[]
+  requestHistories RequestHistory[]
+  
+  
+  
+  documentRequest  DocumentRequest[] @relation("BranchToRequest")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  nic       String   @unique
+  name      String  
+  email     String   @unique
+  password  String
+  role      Role   @default(USER)
+  
+  branch    Branch   @relation(fields: [branchId], references: [id])
+  branchId  Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([branchId])
+}
+
+model DocumentRequest {
+  id             Int           @id @default(autoincrement())
+  docNumber      String        @unique
+  documentType   DocType       
+  status         RequestStatus @default(PENDING)
+  requestedAt    DateTime      @default(now())
+  createdAt      DateTime      @default(now())
+
+  senderId       Int
+  branch         Branch        @relation("BranchToRequest",fields:[senderId],references:[id])
+
+  
+}
+
+// Loan Table
+model Loan {
+  id           Int      @id @default(autoincrement())
+  contract_no  String   @unique
+  amount       Float
+  duration     String
+  loan_type    String
+  createdAt    DateTime @default(now())
+
+  
+  branchId     Int
+  branch       Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+}
+
+// Account Table
+model Account {
+  id              Int      @id @default(autoincrement())
+  account_number  String   @unique
+  customer_name   String
+  amount          Float
+  date            String   
+  createdAt       DateTime @default(now())
+  bill_type       String
+  billPhoto       String?
+  branchId        Int
+  branch          Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+}
+
+// Investment Table
+model Investment {
+  id             Int      @id @default(autoincrement())
+  contract_no    String
+  amount         Float
+  createdAt      DateTime @default(now())
+  uploadedAt     DateTime @default(now())
+  
+  branchId       Int
+  branch         Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+}
+
+
+model RequestHistory {
+  id           Int      @id @default(autoincrement())
+  branchId     Int
+  documentType String   
+  referenceNo  String   
+  link         String   
+  status       String   @default("Viewed")
+  createdAt    DateTime @default(now())
+  
+  branch       Branch   @relation(fields: [branchId], references: [id])
+}
+
+// --- ENUMS ---
+
+enum Role {
+  ADMIN
+  USER
+  MANAGER
+}
+
+enum DocType {
+  LOAN
+  ACCOUNT
+  INVESTMENT
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  DECLINED
+  RETURNED
+  SUBMITTED
+}

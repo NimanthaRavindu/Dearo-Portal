@@ -1,0 +1,43 @@
+{
+  "name": "dearo-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.8.0",
+    "@radix-ui/react-avatar": "^1.1.11",
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "@radix-ui/react-slot": "^1.2.4",
+    "bcryptjs": "^3.0.3",
+    "chart.js": "^4.5.1",
+    "class-variance-authority": "^0.7.1",
+    "cloudflared": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.577.0",
+    "mysql2": "^3.22.3",
+    "next": "16.2.0",
+    "next-auth": "^4.24.14",
+    "next-themes": "^0.4.6",
+    "prisma": "^5.8.0",
+    "react": "19.2.4",
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "19.2.4",
+    "recharts": "^3.8.1",
+    "tailwind-merge": "^3.5.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
